@@ -182,8 +182,16 @@
 				".": {
 					"type": "object",
 					"properties": {
-						"equals": {},
-						"contains": {},
+						"equals": {
+							"oneOf": [
+								{ "type": "string" },
+								{ "type": "number" },
+								{ "type": "boolean" }
+							]
+						},
+						"contains": {
+							"type": "string"
+						},
 						"gte": {
 							"type": "number"
 						},

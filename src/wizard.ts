@@ -53,8 +53,8 @@ export interface PredicateCondition {
    * via the `patternProperty` ".".
    */
   [k: string]: {
-    equals?: unknown;
-    contains?: unknown;
+    equals?: string | number | boolean;
+    contains?: string;
     gte?: number;
     lte?: number;
     gt?: number;
