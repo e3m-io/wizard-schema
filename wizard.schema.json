@@ -1,0 +1,254 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema#",
+	"title": "Wizard Schema",
+	"description": "Defines the steps and elements of a wizard sequence",
+	"type": "object",
+	"properties": {
+		"effects": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/effect"
+			}
+		},
+		"initialState": {
+			"type": "object"
+		},
+		"steps": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/step"
+			}
+		}
+	},
+	"required": ["steps"],
+	"additionalProperties": false,
+	"definitions": {
+		"step": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"elements": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/element"
+					}
+				},
+				"children": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/step"
+					}
+				},
+				"title": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"enabled": {
+					"$ref": "#/definitions/condition"
+				},
+				"visible": {
+					"$ref": "#/definitions/condition"
+				}
+			},
+			"required": ["id", "title"],
+			"additionalProperties": false
+		},
+		"element": {
+			"oneOf": [
+				{ "$ref": "#/definitions/controlElement" },
+				{ "$ref": "#/definitions/layoutElement" },
+				{ "$ref": "#/definitions/sectionElement" }
+			]
+		},
+		"layoutElement": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"enum": ["HorizontalLayout", "VerticalLayout"]
+				},
+				"elements": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/element"
+					}
+				}
+			},
+			"required": ["type", "elements"],
+			"additionalProperties": false
+		},
+		"sectionElement": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "Section"
+				},
+				"elements": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/element"
+					}
+				},
+				"title": {
+					"type": "string"
+				}
+			},
+			"required": ["type", "title", "elements"],
+			"additionalProperties": false
+		},
+		"controlElement": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "Control"
+				},
+				"scope": {
+					"type": "string"
+				},
+				"label": {
+					"type": "string"
+				},
+				"helpText": {
+					"type": "string"
+				},
+				"hint": {
+					"type": "string"
+				},
+				"disabled": {
+					"$ref": "#/definitions/condition"
+				},
+				"options": {
+					"type": "object",
+					"properties": {
+						"format": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"required": ["type", "scope"],
+			"additionalProperties": false
+		},
+		"action": {
+			"description": "",
+			"type": "object",
+			"properties": {
+				"condition": {
+					"$ref": "#/definitions/condition"
+				},
+				"do": {
+					"type": "object",
+					"properties": {
+						"set": {
+							"type": "object",
+							"patternProperties": {
+								".": {
+									"type": "string"
+								}
+							},
+							"minProperties": 1
+						},
+						"delete": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"minItems": 1
+						}
+					},
+					"minProperties": 1,
+					"additionalProperties": false
+				}
+			},
+			"required": ["do"],
+			"additionalProperties": false
+		},
+		"condition": {
+			"oneOf": [
+				{
+					"$ref": "#/definitions/predicateCondition"
+				},
+				{
+					"$ref": "#/definitions/compoundCondition"
+				}
+			]
+		},
+		"predicateCondition": {
+			"type": "object",
+			"patternProperties": {
+				".": {
+					"type": "object",
+					"properties": {
+						"equals": {},
+						"contains": {},
+						"gte": {
+							"type": "number"
+						},
+						"lte": {
+							"type": "number"
+						},
+						"gt": {
+							"type": "number"
+						},
+						"lt": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false,
+					"minProperties": 1,
+					"maxProperties": 1
+				}
+			}
+		},
+		"compoundCondition": {
+			"type": "object",
+			"properties": {
+				"AND": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/condition"
+					},
+					"minItems": 2
+				},
+				"OR": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/condition"
+					},
+					"minItems": 2
+				},
+				"NOT": {
+					"$ref": "#/definitions/condition"
+				}
+			},
+			"additionalProperties": false,
+			"minProperties": 1,
+			"maxProperties": 1
+		},
+		"effect": {
+			"type": "object",
+			"description": "Define `Action`s to run when a `Dependency` changes",
+			"properties": {
+				"actions": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/action"
+					},
+					"minItems": 1
+				},
+				"dependencies": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"minItems": 1
+				}
+			},
+			"required": ["actions", "dependencies"],
+			"additionalProperties": false
+		}
+	}
+}

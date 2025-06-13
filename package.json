@@ -1,0 +1,32 @@
+{
+	"name": "wizard-schema",
+	"version": "0.0.0-development",
+	"description": "Defines the steps and elements of a wizard sequence",
+	"author": "e3m-io",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/e3m-io/wizard-schema.git"
+	},
+	"homepage": "https://github.com/e3m-io/wizard-schema",
+	"files": [
+		"./dist",
+		"./wizard.schema.json"
+	],
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"wizard.ts": "json2ts -i ./wizard.schema.json -o ./src/wizard.ts",
+		"prepare": "node --run wizard.ts && node --run build"
+	},
+	"devDependencies": {
+		"json-schema-to-typescript": "15.0.4",
+		"typescript": "5.8.3"
+	},
+	"packageManager": "pnpm@10.12.1"
+}
