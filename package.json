@@ -1,5 +1,5 @@
 {
-	"name": "wizard-schema",
+	"name": "@e3m-io/wizard-schema",
 	"version": "0.0.0-development",
 	"description": "Defines the steps and elements of a wizard sequence",
 	"author": "e3m-io",
