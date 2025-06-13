@@ -6,7 +6,7 @@
  */
 
 export type Condition = PredicateCondition | CompoundCondition;
-export type Element = ControlElement | LayoutElement | SectionElement;
+export type Element = ControlElement | LayoutElement | FieldsetElement;
 
 /**
  * Defines the steps and elements of a wizard sequence
@@ -88,8 +88,14 @@ export interface ControlElement {
   helpText?: string;
   hint?: string;
   disabled?: Condition;
+  /**
+   * Modifies the type of input control used for the field.
+   */
+  format?: string;
+  /**
+   * Options passed as props to the control. Dependent on the element's `format` option.
+   */
   options?: {
-    format?: string;
     [k: string]: unknown;
   };
 }
@@ -97,8 +103,8 @@ export interface LayoutElement {
   type: "HorizontalLayout" | "VerticalLayout";
   elements: Element[];
 }
-export interface SectionElement {
-  type: "Section";
+export interface FieldsetElement {
+  type: "Fieldset";
   elements: Element[];
-  title: string;
+  legend: string;
 }

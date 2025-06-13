@@ -61,7 +61,7 @@
 			"oneOf": [
 				{ "$ref": "#/definitions/controlElement" },
 				{ "$ref": "#/definitions/layoutElement" },
-				{ "$ref": "#/definitions/sectionElement" }
+				{ "$ref": "#/definitions/fieldsetElement" }
 			]
 		},
 		"layoutElement": {
@@ -80,11 +80,11 @@
 			"required": ["type", "elements"],
 			"additionalProperties": false
 		},
-		"sectionElement": {
+		"fieldsetElement": {
 			"type": "object",
 			"properties": {
 				"type": {
-					"const": "Section"
+					"const": "Fieldset"
 				},
 				"elements": {
 					"type": "array",
@@ -92,11 +92,11 @@
 						"$ref": "#/definitions/element"
 					}
 				},
-				"title": {
+				"legend": {
 					"type": "string"
 				}
 			},
-			"required": ["type", "title", "elements"],
+			"required": ["type", "legend", "elements"],
 			"additionalProperties": false
 		},
 		"controlElement": {
@@ -120,13 +120,13 @@
 				"disabled": {
 					"$ref": "#/definitions/condition"
 				},
+				"format": {
+					"type": "string",
+					"description": "Modifies the type of input control used for the field."
+				},
 				"options": {
 					"type": "object",
-					"properties": {
-						"format": {
-							"type": "string"
-						}
-					}
+					"description": "Options passed as props to the control. Dependent on the element's `format` option."
 				}
 			},
 			"required": ["type", "scope"],
